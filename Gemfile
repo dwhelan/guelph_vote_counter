@@ -1,0 +1,10 @@
+source 'https://rubygems.org'
+ruby '1.9.3'
+
+gem 'awesome_print'
+gem 'guard'
+gem 'guard-rspec'
+gem 'pdf-reader', '~> 1.3.3'
+gem 'pry'
+gem 'rspec'
+gem 'rspec'
