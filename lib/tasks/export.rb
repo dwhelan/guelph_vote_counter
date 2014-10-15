@@ -3,7 +3,7 @@ require 'csv'
 desc 'Export meetings'
 task :export do
 
-  meeting = Meeting.new 'http://guelph.ca/wp-content/uploads/council_minutes_082514.pdf'
+  meeting = Meeting.from_minutes 'http://guelph.ca/wp-content/uploads/council_minutes_082514.pdf'
 
   CSV.open('tmp/motions.csv', 'w') do |csv|
 

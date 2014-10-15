@@ -1,13 +1,12 @@
 require_relative 'spec_helper'
 
-describe Meeting do
+describe Affinity do
 
-  subject { Meeting.from_minutes file }
+  subject { Meeting.new file }
 
   context 'Meeting: August 25, 2014' do
-    let(:file) { 'spec/data/council_minutes_082514.pdf' }
+    let(:file) { './data/council_minutes_082514.pdf' }
 
     its(:date) { should eq Date.new 2014, 8, 25 }
   end
 end
-

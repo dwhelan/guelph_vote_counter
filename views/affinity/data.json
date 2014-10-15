@@ -1,16 +1,16 @@
 {
   "nodes":[
-    {"name":"Farbridge","group":1},
-    {"name":"Guthrie","group":2},
-    {"name":"Bell","group":2},
-    {"name":"Laidlaw","group":1}
+    {"name": "Farbridge", "group": 1},
+    {"name": "Guthrie",   "group": 2},
+    {"name": "Bell",      "group": 2},
+    {"name": "Laidlaw",   "group": 1}
   ],
   "links":[
-    {"source":1,"target":0,"value":1},
-    {"source":2,"target":0,"value":3},
-    {"source":3,"target":0,"value":10},
-    {"source":1,"target":2,"value":11},
-    {"source":1,"target":3,"value":4},
-    {"source":2,"target":3,"value":5}
+    {"source":1, "target":0, "value":  1},
+    {"source":2, "target":0, "value":  3},
+    {"source":3, "target":0, "value": 10},
+    {"source":1, "target":2, "value": 11},
+    {"source":1, "target":3, "value":  4},
+    {"source":2, "target":3, "value":  5}
   ]
 }

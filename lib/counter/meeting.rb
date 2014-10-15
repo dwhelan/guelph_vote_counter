@@ -3,26 +3,24 @@ require 'open-uri'
 
 class Meeting
 
-  attr_reader :minutes_url
+  attr_reader :minutes
 
-  def initialize(minutes_url)
-    @minutes_url = minutes_url
+  class << self
+    def from_minutes(minutes_url)
+      io     = open(minutes_url)
+      reader = PDF::Reader.new(io)
+      minutes = reader.pages.map(&:text).join(' ')
+      Meeting.new minutes
+    end
+  end
+
+  def initialize(minutes)
+    @minutes = minutes
   end
 
   def date
-    match = minutes_url.match  /.*(\d\d)(\d\d)(\d\d)\.pdf\z/i
-    month = match[1].to_i
-    day   = match[2].to_i
-    year  = match[3].to_i + 2000
-    Date.new year, month, day
-  end
-
-  def minutes
-    @minutes ||= begin
-      io     = open(minutes_url)
-      reader = PDF::Reader.new(io)
-      reader.pages.map(&:text).join(' ')
-    end
+    match = minutes.match /\w+\s+\d+,\s*\d{4}/m
+    Date.strptime(match[0], '%B %d, %Y') if match
   end
 
   def motions
