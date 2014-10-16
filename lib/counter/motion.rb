@@ -54,24 +54,30 @@ class Motion
 
   class MotionPart
 
-    attr_reader :full_text, :text
-
     def initialize(full_text, start, stop)
       @full_text = full_text
-
-      if index(start) && index(stop)
-        @text = full_text.slice(index(start)..index(stop, index(start))-1).strip
-      else
-        @text = ''
-      end
+      @start     = start
+      @stop      = stop
     end
 
-    def index(search, offset=0)
-      full_text.index(search, offset)
+    def text
+      @text ||= start_index && stop_index ? full_text.slice(start_index...stop_index).strip : ''
     end
 
     def inspect
       text
+    end
+
+    private
+
+    attr_reader :full_text, :start, :stop
+
+    def start_index
+      @start_index = full_text.index(start)
+    end
+
+    def stop_index
+      @stop_index = full_text.index(stop, start_index)
     end
   end
 end
