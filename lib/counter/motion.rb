@@ -2,7 +2,8 @@ require 'pdf-reader'
 
 class Motion
   Parts = [
-    { name: :moved_by,    start: /\A/,               end: /Seconded by/},
+    { name: :preamble,    start: /\A/,               end: /\s*\d+\.\s+Moved by/, replace: /Moved\s+by\s+\w+\s+/},
+    { name: :moved_by,    start: /Moved by/,         end: /Seconded by/},
     { name: :seconded_by, start: /Seconded by/,      end: /[\d\.\s]*that/i },
     { name: :text,        start: /[\d\.\s]*that/i,   end: /VOTING|CARRIED|DEFEATED/ },
     { name: :in_favour,   start: /VOTING IN FAVOUR/, end: /\(\d+\)/ },
@@ -11,7 +12,8 @@ class Motion
     { name: :result,      start: /CARRIED|DEFEATED/, end: /\z/ },
   ]
 
-  def initialize(full_text)
+  def initialize(full_text=nil)
+    full_text ||= ''
     @parts = {}
 
     Parts.map do |part|
@@ -19,32 +21,40 @@ class Motion
     end
   end
 
+  def preamble
+    part :preamble
+  end
+
   def moved_by
-    parts[:moved_by].last_word
+    part :moved_by, /Moved\s+by\s+\w+\s+/
   end
 
   def seconded_by
-    parts[:seconded_by].last_word
+    part :seconded_by, /Seconded\s+by\s+\w+\s+/
   end
 
   def text
-    parts[:text].text
+    part :text
   end
 
   def in_favour
-    voters parts[:in_favour].text.gsub /VOTING IN FAVOUR/, ''
+    voters part(:in_favour, /VOTING IN FAVOUR/)
   end
 
   def against
-    voters parts[:against].text.gsub /VOTING AGAINST/, ''
+    voters part(:against, /VOTING AGAINST/)
   end
 
   def notes
-    parts[:notes].text.gsub(/VOTING AGAINST.*\)/, '').strip
+    part :notes, /VOTING AGAINST.*\)/
   end
 
   def result
-    parts[:result].text
+    part :result
+  end
+
+  def unanimous?
+    in_favour.empty? || against.empty?
   end
 
   def inspect
@@ -54,6 +64,10 @@ class Motion
   private
 
   attr_accessor :parts
+
+  def part(name, replace=//)
+    parts[name].text.gsub replace, ''
+  end
 
   def voters(text)
     text = text.gsub /(:|Mayor|Councillors?,?|\(\d+\))/, ''

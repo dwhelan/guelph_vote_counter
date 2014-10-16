@@ -28,3 +28,4 @@ class Meeting
     motions_text.map{|text| Motion.new text}
   end
 end
+
