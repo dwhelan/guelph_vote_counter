@@ -24,7 +24,7 @@ class Meeting
   end
 
   def motions
-    motions_text = minutes.scan /Moved *?by.*?(?:CARRIED|DEFEATED)/m
+    motions_text = minutes.scan /Moved *?by.*?(?:CARRIED|DEFEATED|Deferral)/m
     motions_text.map{|text| Motion.new text}
   end
 end

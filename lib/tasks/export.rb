@@ -7,10 +7,9 @@ task :export do
 
   CSV.open('tmp/motions.csv', 'w') do |csv|
 
-    csv << ['Date', 'Motion', 'In Favour', 'Against', 'Notes', 'Result' ]
+    csv << ['Date', 'Preamble', 'Motion', 'In Favour', 'Against', 'Notes', 'Result' ]
     meeting.motions.each do |motion|
-      csv << [meeting.date, motion.text, motion.in_favour.join(','), motion.against.join(','), motion.notes, motion.result]
+      csv << [meeting.date, motion.preamble, motion.text, motion.in_favour.join(','), motion.against.join(','), motion.notes, motion.result]
     end
   end
-
 end
