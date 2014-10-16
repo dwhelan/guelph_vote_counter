@@ -1,5 +1,6 @@
 require 'pdf-reader'
 require 'open-uri'
+require 'strscan'
 
 class Meeting
 
@@ -24,7 +25,12 @@ class Meeting
   end
 
   def motions
-    motions_text = minutes.scan /Moved *?by.*?(?:CARRIED|DEFEATED|Deferral)/m
-    motions_text.map{|text| Motion.new text}
+    scanner = StringScanner.new minutes
+
+    motions=[]
+    while text = scanner.scan(/(.*?(CARRIED|DEFEATED|Deferral))/m)
+      motions << Motion.new(text)
+    end
+    motions
   end
 end
