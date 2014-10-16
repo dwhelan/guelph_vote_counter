@@ -48,12 +48,35 @@ class Motion
 
   def part(name, replace=nil)
     replace ||= Parts[name][:replace] || //
-    parts[name].text.gsub replace, ''
+    parts[name].text.gsub(replace, '').strip
   end
 
   def voters(text)
     text = text.gsub /(:|Mayor|Councillors?,?|\(\d+\))/, ''
     text = text.gsub /\s+and\s+/, ','
     text.split(/,/).map{|v| v.strip}
+  end
+
+  class MotionPart
+
+    attr_reader :full_text, :text
+
+    def initialize full_text, start, stop
+      @full_text = full_text
+
+      if index(start) && index(stop)
+        @text = full_text.slice(index(start)..index(stop)-1).strip
+      else
+        @text = ''
+      end
+    end
+
+    def index(search, offset=0)
+      full_text.index(search, offset)
+    end
+
+    def inspect
+      text
+    end
   end
 end
