@@ -1,56 +1,37 @@
 require 'pdf-reader'
 
 class Motion
-  Parts = [
-    { name: :preamble,    start: /\A/,               end: /\s*\d+\.\s+Moved by/, replace: /Moved\s+by\s+\w+\s+/},
-    { name: :moved_by,    start: /Moved by/,         end: /Seconded by/},
-    { name: :seconded_by, start: /Seconded by/,      end: /[\d\.\s]*that/i },
-    { name: :text,        start: /[\d\.\s]*that/i,   end: /VOTING|CARRIED|DEFEATED/ },
-    { name: :in_favour,   start: /VOTING IN FAVOUR/, end: /\(\d+\)/ },
-    { name: :against,     start: /VOTING AGAINST/,   end: /\(\d+\)/ },
-    { name: :notes,       start: /VOTING AGAINST/,   end: /CARRIED|DEFEATED/ },
-    { name: :result,      start: /CARRIED|DEFEATED/, end: /\z/ },
-  ]
+  Parts = {
+    preamble:    { start: /\A/,               end: /\s*\d+\.\s+Moved by/, replace: /Moved\s+by\s+\w+\s+/ },
+    moved_by:    { start: /Moved by/,         end: /Seconded by/,         replace: /Moved\s+by\s+\w+\s+/ },
+    seconded_by: { start: /Seconded by/,      end: /[\d\.\s]*that/i,      replace: /Seconded\s+by\s+\w+\s+/ },
+    text:        { start: /[\d\.\s]*that/i,   end: /VOTING|CARRIED|DEFEATED/ },
+    in_favour:   { start: /VOTING IN FAVOUR/, end: /\(\d+\)/,             replace: /VOTING IN FAVOUR/ },
+    against:     { start: /VOTING AGAINST/,   end: /\(\d+\)/,             replace: /VOTING AGAINST/ },
+    notes:       { start: /VOTING AGAINST/,   end: /CARRIED|DEFEATED/,    replace: /VOTING AGAINST.*\)/ },
+    result:      { start: /CARRIED|DEFEATED/, end: /\z/ },
+  }
 
-  def initialize(full_text=nil)
-    full_text ||= ''
+  def initialize(full_text='')
     @parts = {}
 
-    Parts.map do |part|
-      parts[part[:name]] = MotionPart.new full_text, part[:start], part[:end]
+    Parts.each do |name, settings|
+      parts[name] = MotionPart.new full_text, settings[:start], settings[:end]
     end
   end
 
-  def preamble
-    part :preamble
-  end
-
-  def moved_by
-    part :moved_by, /Moved\s+by\s+\w+\s+/
-  end
-
-  def seconded_by
-    part :seconded_by, /Seconded\s+by\s+\w+\s+/
-  end
-
-  def text
-    part :text
+  [:preamble, :moved_by, :seconded_by, :text, :notes, :result].each do |name|
+    define_method name do
+      part name
+    end
   end
 
   def in_favour
-    voters part(:in_favour, /VOTING IN FAVOUR/)
+    voters part :in_favour
   end
 
   def against
-    voters part(:against, /VOTING AGAINST/)
-  end
-
-  def notes
-    part :notes, /VOTING AGAINST.*\)/
-  end
-
-  def result
-    part :result
+    voters part :against
   end
 
   def unanimous?
@@ -65,7 +46,8 @@ class Motion
 
   attr_accessor :parts
 
-  def part(name, replace=//)
+  def part(name, replace=nil)
+    replace ||= Parts[name][:replace] || //
     parts[name].text.gsub replace, ''
   end
 

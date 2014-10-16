@@ -4,7 +4,7 @@ describe Motion do
 
   subject { Motion.new text }
 
-  [nil, '', '\t\n'].each do |empty_text|
+  ['', '\t\n'].each do |empty_text|
     describe "with empty text: '#{empty_text || 'nil'}': " do
       let(:text) { empty_text }
       %w(preamble moved_by seconded_by text notes result).each do |part|
