@@ -30,11 +30,11 @@ class Meeting
   end
 
   def motions
-    scanner = StringScanner.new text.sub(/.*Call to Order.*?\\n/i, '')
+    scanner = StringScanner.new text.sub(/.*Call to Order.*?\n/mi, '')
 
     motions=[]
-    while text = scanner.scan(/(.*?(CARRIED|DEFEATED|Deferral))/m)
-      motions << Motion.new(text)
+    while motion_text = scanner.scan(/(.*?(CARRIED|DEFEATED|Deferral))/m)
+      motions << Motion.new(motion_text)
     end
     motions
   end

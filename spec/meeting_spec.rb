@@ -27,7 +27,7 @@ describe Meeting do
   end
 
   describe 'ignore text up to "Call to Order""' do
-    let(:text) { 'blah blah CaLl TO order blah blah\nPreamble Moved by ... CARRIED' }
+    let(:text) { "blah blah CaLl TO order blah blah\nPreamble Moved by ... CARRIED" }
     it { expect(subject.motions[0].preamble).to eq 'Preamble' }
   end
 
