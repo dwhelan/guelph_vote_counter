@@ -27,14 +27,14 @@
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script>
-  var width = 1024,
-    height = 900;
+  var width = 1000,
+    height = 640;
 
   var color = d3.scale.category20();
-  var radius = 30;
+  var radius = 20;
 
   var force = d3.layout.force()
-    .charge(-1200)
+    .charge(-1000)
     .linkDistance(10 * radius)
     .size([width, height]);
 
