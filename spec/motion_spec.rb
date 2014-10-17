@@ -20,6 +20,28 @@ describe Motion do
     end
   end
 
+  describe 'typos' do
+    describe 'with "Councilllors" instead of "Councillors"' do
+      let(:text)      { "VOTING IN FAVOUR: Mayor Farbridge,, Councilllors Bell (2)" }
+      its(:in_favour)   { should eq ['Farbridge', 'Bell'] }
+    end
+
+    describe 'with "Councilors" instead of "Councillors"' do
+      let(:text)      { "VOTING IN FAVOUR: Mayor Farbridge,, Councilors Bell (2)" }
+      its(:in_favour)   { should eq ['Farbridge', 'Bell'] }
+    end
+
+    describe 'with "Dennis Findlay"' do
+      let(:text)      { "VOTING IN FAVOUR: Dennis Findlay (1)" }
+      its(:in_favour)   { should eq ['Dennis', 'Findlay'] }
+    end
+
+    describe 'with "Piperand Van Hellemond"' do
+      let(:text)      { "VOTING IN FAVOUR: Piperand Van Hellemond (1)" }
+      its(:in_favour)   { should eq ['Piper', 'Van Hellemond'] }
+    end
+  end
+
   describe 'blank votes in_favour' do
     let(:text)      { "VOTING IN FAVOUR: Mayor Farbridge,, Councillors Bell (2)" }
     its(:in_favour) { should eq %w(Farbridge Bell) }

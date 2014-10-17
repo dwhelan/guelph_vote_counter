@@ -55,10 +55,30 @@ class Motion
   end
 
   def voters(name)
-    text = part(name).gsub /(:|Mayor|Councillors?,?|\(\d+\))/m, ''
-    text = text.gsub /\s+and\s+/m, ','
-    text = text.gsub /\s*,\s*/m, ','
-    text = text.gsub /,+/m, ','
+    text = remove_titles(part(name))
+    text = remove_and(text)
+    text = remove_blanks(text)
+    text = add_missing_commas(text)
+    to_name_array(text)
+  end
+
+  def remove_titles(text)
+    text.gsub(/(:|Mayor|Council+ors?,?|\(\d+\))/m, '')
+  end
+
+  def remove_and(text)
+    text.gsub(/and\s+/m, ',').gsub(/hofl,/mi, 'Hofland,')
+  end
+
+  def remove_blanks(text)
+    text.gsub(/\s*,\s*/m, ',').gsub(/,+/m, ',')
+  end
+
+  def add_missing_commas(text)
+    text.gsub(/(\w+)\s+(\w+)/m, '\1,\2').gsub(/van,(\w+)/mi, 'Van \1')
+  end
+
+  def to_name_array(text)
     CSV.parse(text).flatten.compact.map{|v| v.strip}
   end
 

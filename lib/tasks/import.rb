@@ -21,7 +21,7 @@ task :import do
   end
 
   File.open('./views/affinity/data.json', 'w') do |file|
-    file.write affinity.force_field(min: meeting_count*2).to_json
+    file.write affinity.force_field(min: meeting_count*1.75).to_json
   end
 
 end
