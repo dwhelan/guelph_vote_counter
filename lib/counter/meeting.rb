@@ -21,6 +21,7 @@ class Meeting
 
   def initialize(text)
     @text = text
+    clean
   end
 
   def date
@@ -36,5 +37,12 @@ class Meeting
       motions << Motion.new(text)
     end
     motions
+  end
+
+  private
+
+  def clean
+    text.gsub! /\s*\w+\s+\d+,\s+\d{4}\s+Guelph City Council Meeting\s*/, ' '
+    text.gsub! /\s*Page\s+\d*\s*/, ' '
   end
 end

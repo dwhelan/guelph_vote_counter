@@ -37,4 +37,16 @@ describe Meeting do
       its('motions.count') { should eq 1 }
     end
   end
+
+  describe 'remove headers' do
+    let(:text)   { "foo#{header}bar foo#{header}bar" }
+    let(:header) { "\n\t August 25, 2014 Guelph City Council Meeting\n\t" }
+    its(:text)   { should eq 'foo bar foo bar' }
+  end
+
+  describe 'remove footers' do
+    let(:text)   { "foo#{footer}bar foo#{footer}bar" }
+    let(:footer) { "\n\t Page 1\n\t" }
+    its(:text) { should eq 'foo bar foo bar' }
+  end
 end
