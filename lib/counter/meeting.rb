@@ -25,7 +25,8 @@ class Meeting
   end
 
   def motions
-    scanner = StringScanner.new minutes
+
+    scanner = StringScanner.new minutes.sub(/.*Call to Order.*?\\n/i, '')
 
     motions=[]
     while text = scanner.scan(/(.*?(CARRIED|DEFEATED|Deferral))/m)

@@ -2,7 +2,7 @@ require 'pdf-reader'
 
 class Motion
   Parts = {
-    preamble:    { start: /\A/,                        stop: /\s*\d+\.\s+Moved by/, replace: /Moved\s+by\s+\w+\s+/ },
+    preamble:    { start: /\A/,                        stop: /Moved by/,            replace: /\s*\d+\.\z/ },
     moved_by:    { start: /Moved by/,                  stop: /Seconded by/,         replace: /Moved\s+by\s+\w+\s+/ },
     seconded_by: { start: /Seconded by/,               stop: /[\d\.\s]*that/i,      replace: /Seconded\s+by\s+\w+\s+/ },
     text:        { start: /[\d\.\s]*that/i,            stop: /VOTING|CARRIED|DEFEATED|Deferral/ },
@@ -12,11 +12,14 @@ class Motion
     result:      { start: /CARRIED|DEFEATED|Deferral/, stop: /\z/,                  replace: /Deferral/, with: 'DEFERRED'},
   }
 
-  def initialize(full_text='')
+  attr_reader :text
+
+  def initialize(text='')
+    @text = text
     @parts = {}
 
     Parts.each do |name, settings|
-      parts[name] = MotionPart.new full_text, settings[:start], settings[:stop]
+      parts[name] = MotionPart.new text, settings[:start], settings[:stop]
     end
   end
 
@@ -33,7 +36,7 @@ class Motion
   end
 
   def inspect
-    "Moved by #{moved_by.inspect}\nSeconded by #{seconded_by.inspect}\n#{text.inspect}\nIn favour: #{in_favour.inspect}\nAgainst: #{against.inspect}\nResult #{result.inspect}\nNotes: #{notes.inspect}"
+    "Preamble: #{preamble}\nMoved by #{moved_by.inspect}\nSeconded by #{seconded_by.inspect}\n#{text.inspect}\nIn favour: #{in_favour.inspect}\nAgainst: #{against.inspect}\nResult #{result.inspect}\nNotes: #{notes.inspect}"
   end
 
   private

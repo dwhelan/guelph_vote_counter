@@ -21,16 +21,20 @@ describe Meeting do
 
   subject { Meeting.new text }
 
-  describe 'with empty meeting minues' do
+  describe 'with empty meeting minutes' do
     let(:text) { '' }
     its(:motions) { should eq [] }
   end
 
+  describe 'ignore text up to "Call to Order""' do
+    let(:text) { 'blah blah CaLl TO order blah blah\nPreamble Moved by ... CARRIED' }
+    it { expect(subject.motions[0].preamble).to eq 'Preamble' }
+  end
+
   %w(CARRIED DEFEATED Deferral).each do |result|
-    describe "with one motion that was #{result}" do
+    describe "Call to Order\nwith one motion that was #{result}" do
       let(:text) { "Moved by ... #{result}" }
       its('motions.count') { should eq 1 }
     end
   end
 end
-
