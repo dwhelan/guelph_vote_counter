@@ -14,6 +14,8 @@ class Meeting
       from_text text
     end
 
+    alias_method :from_file, :from_url
+
     def from_text(text)
       Meeting.new text
     end

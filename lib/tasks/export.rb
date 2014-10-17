@@ -1,15 +1,22 @@
 require 'csv'
+require 'fileutils'
 
-desc 'Export meetings'
+desc 'Export meeting minutes'
 task :export do
 
-  meeting = Meeting.from_url 'http://guelph.ca/wp-content/uploads/council_minutes_082514.pdf'
+  Dir.foreach('./minutes') do |file|
+    next if file == '.' or file == '..'
 
-  CSV.open('tmp/motions.csv', 'w') do |csv|
+    meeting = Meeting.from_file "./minutes/#{file}"
 
-    csv << ['Date', 'Preamble', 'Moved By', 'Seconded By', 'Motion', 'In Favour', 'Against', 'Notes', 'Result' ]
-    meeting.motions.each do |motion|
-      csv << [meeting.date, motion.preamble, motion.moved_by, motion.seconded_by, motion.text, motion.in_favour.join(','), motion.against.join(','), motion.notes, motion.result]
+    FileUtils.mkdir_p './tmp/export'
+
+    CSV.open("./tmp/export/#{file}.csv", 'w') do |csv|
+
+      csv << ['Date', 'Preamble', 'Moved By', 'Seconded By', 'Motion', 'In Favour', 'Against', 'Notes', 'Result' ]
+      meeting.motions.each do |motion|
+        csv << [meeting.date, motion.preamble, motion.moved_by, motion.seconded_by, motion.text, motion.in_favour.join(','), motion.against.join(','), motion.notes, motion.result]
+      end
     end
   end
 end
