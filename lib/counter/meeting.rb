@@ -4,29 +4,32 @@ require 'strscan'
 
 class Meeting
 
-  attr_reader :minutes
+  attr_reader :text
 
   class << self
-    def from_minutes(minutes_url)
+    def from_url(minutes_url)
       io     = open(minutes_url)
       reader = PDF::Reader.new(io)
-      minutes = reader.pages.map(&:text).join(' ')
-      Meeting.new minutes
+      text = reader.pages.map(&:text).join(' ')
+      from_text text
+    end
+
+    def from_text(text)
+      Meeting.new text
     end
   end
 
-  def initialize(minutes)
-    @minutes = minutes
+  def initialize(text)
+    @text = text
   end
 
   def date
-    match = minutes.match /\w+\s+\d+,\s*\d{4}/m
+    match = text.match /\w+\s+\d+,\s*\d{4}/m
     Date.strptime(match[0], '%B %d, %Y') if match
   end
 
   def motions
-
-    scanner = StringScanner.new minutes.sub(/.*Call to Order.*?\\n/i, '')
+    scanner = StringScanner.new text.sub(/.*Call to Order.*?\\n/i, '')
 
     motions=[]
     while text = scanner.scan(/(.*?(CARRIED|DEFEATED|Deferral))/m)

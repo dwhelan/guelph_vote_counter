@@ -3,7 +3,7 @@ require_relative 'spec_helper'
 describe Meeting do
 
   describe 'from' do
-    subject { Meeting.from_minutes "spec/data/#{file}" }
+    subject { Meeting.from_url "spec/data/#{file}" }
 
     describe 'August 25, 2014' do
       let(:file) { 'council_minutes_082514.pdf' }
