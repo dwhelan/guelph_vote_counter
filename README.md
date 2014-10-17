@@ -1,3 +1,5 @@
-guelph_vote_counter
+Guelph Vote Counter
 ===================
-This proejct will extract motions and coucillor votes on each motion by extracting information from meeting minutes.
+This project extract motions and councillor votes from meeting minutes.
+
+See http://dwhelan.github.io/guelph_vote_counter for the result.
