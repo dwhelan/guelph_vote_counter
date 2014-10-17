@@ -7,5 +7,6 @@
 #Printchomp::Application.load_tasks
 
 require_relative './lib/guelph_vote_counter'
+require_relative './lib/tasks/import'
 require_relative './lib/tasks/export'
 

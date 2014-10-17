@@ -17,15 +17,29 @@ describe Motion do
       %w(in_favour against).each do |part|
         its(part) { should eq [] }
       end
-
-      it { should be_unanimous }
     end
+  end
+
+  describe 'blank votes in_favour' do
+    let(:text)      { "VOTING IN FAVOUR: Mayor Farbridge,, Councillors Bell (2)" }
+    its(:in_favour) { should eq %w(Farbridge Bell) }
+  end
+
+  describe 'votes in_favour with "and"' do
+    let(:text)      { "VOTING IN FAVOUR: Mayor Farbridge,, , Councillors Bell (2)" }
+    its(:in_favour) { should eq %w(Farbridge Bell) }
+  end
+
+  describe 'blank votes against' do
+    let(:text)    { "VOTING AGAINST: Mayor Farbridge, Councillors Bell (2)" }
+    its(:against) { should eq %w(Farbridge Bell) }
   end
 
   describe 'when all in favour' do
     let(:text)      { "VOTING IN FAVOUR: Mayor Farbridge, Councillors Bell (2)\nVOTING AGAINST: (0)" }
     its(:in_favour) { should_not be_empty }
     its(:against)   { should be_empty }
+    it { should_not be_contested }
     it { should be_unanimous }
   end
 
@@ -33,6 +47,7 @@ describe Motion do
     let(:text)      { "VOTING IN FAVOUR: (0)\nVOTING AGAINST: Mayor Farbridge, Councillors Bell (2)" }
     its(:in_favour) { should be_empty }
     its(:against)   { should_not be_empty }
+    it { should_not be_contested }
     it { should be_unanimous }
   end
 
@@ -40,6 +55,7 @@ describe Motion do
     let(:text)      { "VOTING IN FAVOUR: Mayor Farbridge (1)\nVOTING AGAINST: Councillors Bell (1)" }
     its(:in_favour) { should_not be_empty }
     its(:against)   { should_not be_empty }
+    it { should be_contested }
     it { should_not be_unanimous }
   end
 
@@ -64,6 +80,7 @@ describe Motion do
     its(:notes)       { should eq '' }
     its(:result)      { should eq 'CARRIED' }
     its(:unanimous?)  { should be_true }
+    its(:contested?)  { should be_false }
     its(:text)        { should match /\A1. That the minutes.*adopt the minutes\.\z/m }
   end
 
@@ -94,6 +111,7 @@ describe Motion do
     its(:notes)       { should eq '' }
     its(:result)      { should eq 'DEFERRED' }
     its(:unanimous?)  { should be_true }
+    its(:contested?)  { should be_false }
     its(:text)        { should match /\A1\. That the Planning, Building, Engineering.*10 year capital budgeting process\.\z/m }
   end
 end

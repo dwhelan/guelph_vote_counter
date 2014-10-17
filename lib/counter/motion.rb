@@ -1,3 +1,4 @@
+require 'csv'
 require 'pdf-reader'
 
 class Motion
@@ -35,6 +36,10 @@ class Motion
     in_favour.empty? || against.empty?
   end
 
+  def contested?
+    ! unanimous?
+  end
+
   def inspect
     "Preamble: #{preamble}\nMoved by #{moved_by.inspect}\nSeconded by #{seconded_by.inspect}\n#{text.inspect}\nIn favour: #{in_favour.inspect}\nAgainst: #{against.inspect}\nResult #{result.inspect}\nNotes: #{notes.inspect}"
   end
@@ -50,9 +55,11 @@ class Motion
   end
 
   def voters(name)
-    text = part(name).gsub /(:|Mayor|Councillors?,?|\(\d+\))/, ''
-    text = text.gsub /\s+and\s+/, ','
-    text.split(/,/).map{|v| v.strip}
+    text = part(name).gsub /(:|Mayor|Councillors?,?|\(\d+\))/m, ''
+    text = text.gsub /\s+and\s+/m, ','
+    text = text.gsub /\s*,\s*/m, ','
+    text = text.gsub /,+/m, ','
+    CSV.parse(text).flatten.compact.map{|v| v.strip}
   end
 
   class MotionPart

@@ -1,16 +1,1 @@
-{
-  "nodes":[
-    {"name": "Farbridge", "group": 1},
-    {"name": "Guthrie",   "group": 2},
-    {"name": "Bell",      "group": 2},
-    {"name": "Laidlaw",   "group": 1}
-  ],
-  "links":[
-    {"source":1, "target":0, "value":  1},
-    {"source":2, "target":0, "value":  3},
-    {"source":3, "target":0, "value": 10},
-    {"source":1, "target":2, "value": 11},
-    {"source":1, "target":3, "value":  4},
-    {"source":2, "target":3, "value":  5}
-  ]
-}
+{"nodes":[{"name":"Bell","group":2},{"name":"Burcher","group":0},{"name":"Councilllors Bell","group":0},{"name":"Dennis","group":1},{"name":"Dennis Findlay","group":0},{"name":"Farbridge","group":1},{"name":"Findlay","group":1},{"name":"Furfaro","group":2},{"name":"Guthrie","group":2},{"name":"Hofland","group":1},{"name":"Kovach","group":0},{"name":"Laidlaw","group":1},{"name":"Piper","group":1},{"name":"Piperand Van Hellemond","group":0},{"name":"Van Hellemond","group":2},{"name":"Wettstein","group":1}],"links":[{"source":7,"target":8,"value":45},{"source":3,"target":5,"value":46},{"source":3,"target":6,"value":43},{"source":3,"target":9,"value":44},{"source":5,"target":6,"value":46},{"source":5,"target":9,"value":50},{"source":6,"target":9,"value":46},{"source":5,"target":12,"value":43},{"source":9,"target":12,"value":42},{"source":3,"target":15,"value":42},{"source":5,"target":15,"value":45},{"source":9,"target":15,"value":42}]}
