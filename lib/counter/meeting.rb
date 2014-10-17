@@ -21,16 +21,19 @@ class Meeting
 
   def initialize(text)
     @text = text
+    date
     clean
   end
 
   def date
-    match = text.match /\w+\s+\d+,\s*\d{4}/m
-    Date.strptime(match[0], '%B %d, %Y') if match
+    @date ||= begin
+      match = text.match /\w+\s+\d+,\s*\d{4}/m
+      Date.strptime(match[0], '%B %d, %Y') if match
+    end
   end
 
   def motions
-    scanner = StringScanner.new text.sub(/.*Call to Order.*?\n/mi, '')
+    scanner = StringScanner.new text
 
     motions=[]
     while motion_text = scanner.scan(/(.*?(CARRIED|DEFEATED|Deferral))/m)
@@ -42,7 +45,9 @@ class Meeting
   private
 
   def clean
+    text.gsub! /.*Call to Order.*?\n/mi, ' '
     text.gsub! /\s*\w+\s+\d+,\s+\d{4}\s+Guelph City Council Meeting\s*/, ' '
     text.gsub! /\s*Page\s+\d*\s*/, ' '
+    text.gsub! /\s+/, ' '
   end
 end

@@ -5,7 +5,7 @@ class Motion
     preamble:    { start: /\A/,                        stop: /Moved by/,            replace: /\s*\d+\.\z/ },
     moved_by:    { start: /Moved by/,                  stop: /Seconded by/,         replace: /Moved\s+by\s+\w+\s+/ },
     seconded_by: { start: /Seconded by/,               stop: /[\d\.\s]*that/i,      replace: /Seconded\s+by\s+\w+\s+/ },
-    text:        { start: /[\d\.\s]*that/i,            stop: /VOTING|CARRIED|DEFEATED|Deferral/ },
+    text:        { start: /[\d\.\s]*That/,             stop: /VOTING|CARRIED|DEFEATED|Deferral/ },
     in_favour:   { start: /VOTING IN FAVOUR/,          stop: /\(\d+\)/,             replace: /VOTING IN FAVOUR/ },
     against:     { start: /VOTING AGAINST/,            stop: /\(\d+\)/,             replace: /VOTING AGAINST/ },
     notes:       { start: /VOTING AGAINST/,            stop: /CARRIED|DEFEATED/,    replace: /VOTING AGAINST.*\)/ },

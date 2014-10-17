@@ -49,4 +49,9 @@ describe Meeting do
     let(:footer) { "\n\t Page 1\n\t" }
     its(:text) { should eq 'foo bar foo bar' }
   end
+
+  describe 'remove extra white space' do
+    let(:text)   { "1 2  3\n4 \n\t5" }
+    its(:text) { should eq '1 2 3 4 5' }
+  end
 end
