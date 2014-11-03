@@ -40,6 +40,10 @@ class Motion
     ! unanimous?
   end
 
+  def voted_differently?(first, second)
+    in_favour.include?(first) && against.include?(second) || in_favour.include?(second) && against.include?(first)
+  end
+
   def inspect
     "Preamble: #{preamble}\nMoved by #{moved_by.inspect}\nSeconded by #{seconded_by.inspect}\n#{text.inspect}\nIn favour: #{in_favour.inspect}\nAgainst: #{against.inspect}\nResult #{result.inspect}\nNotes: #{notes.inspect}"
   end
@@ -79,7 +83,7 @@ class Motion
   end
 
   def to_name_array(text)
-    CSV.parse(text).flatten.compact.map{|v| v.strip}
+    CSV.parse(text).flatten.compact.map(&:strip)
   end
 
   class MotionPart

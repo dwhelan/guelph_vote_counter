@@ -42,6 +42,7 @@ class Affinity
   def default_options
     { min: 0 }
   end
+
   private
 
   attr_reader :links, :groups

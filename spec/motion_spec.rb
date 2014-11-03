@@ -47,7 +47,7 @@ describe Motion do
     its(:in_favour) { should eq %w(Farbridge Bell) }
   end
 
-  describe 'votes in_favour with "and"' do
+  describe 'votes in_favour with extra commas and spaces' do
     let(:text)      { "VOTING IN FAVOUR: Mayor Farbridge,, , Councillors Bell (2)" }
     its(:in_favour) { should eq %w(Farbridge Bell) }
   end
@@ -55,6 +55,7 @@ describe Motion do
   describe 'blank votes against' do
     let(:text)    { "VOTING AGAINST: Mayor Farbridge, Councillors Bell (2)" }
     its(:against) { should eq %w(Farbridge Bell) }
+    it { expect(subject.voted_differently?('Farbridge', 'Bell')).to be_false }
   end
 
   describe 'when all in favour' do
@@ -63,6 +64,7 @@ describe Motion do
     its(:against)   { should be_empty }
     it { should_not be_contested }
     it { should be_unanimous }
+    it { expect(subject.voted_differently?('Farbridge', 'Bell')).to be_false }
   end
 
   describe 'when all against' do
@@ -71,6 +73,7 @@ describe Motion do
     its(:against)   { should_not be_empty }
     it { should_not be_contested }
     it { should be_unanimous }
+    it { expect(subject.voted_differently?('Farbridge', 'Bell')).to be_false }
   end
 
   describe 'when the vote is split' do
@@ -79,6 +82,7 @@ describe Motion do
     its(:against)   { should_not be_empty }
     it { should be_contested }
     it { should_not be_unanimous }
+    it { expect(subject.voted_differently?('Farbridge', 'Bell')).to be_true }
   end
 
   describe 'simple motion' do

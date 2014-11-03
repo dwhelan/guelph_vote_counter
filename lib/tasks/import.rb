@@ -6,6 +6,7 @@ task :import do
   affinity = Affinity.new
   affinity.add_group %w(Farbridge Laidlaw Hofland Findlay Piper Wettstein Dennis)
   affinity.add_group ['Guthrie', 'Bell', 'Furfaro', 'Van Hellemond']
+  affinity.add_group ['Kovach', 'Burcher']
 
   meeting_count = 0
 
